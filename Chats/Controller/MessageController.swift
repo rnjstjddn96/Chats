@@ -21,10 +21,49 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         
         //not logged in
         checkIfUserIsLoggedIn()
+        
+        
+        observeMessage()
+    }
+    
+    var messages = [Message]()
+    
+    //Firebase DB로 부터 메시지 데이터를 불러온다.
+    func observeMessage(){
+        let ref = Database.database().reference().child("messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            if let dictionary = snapshot.value as? [String : AnyObject] {
+                let message = Message()
+                message.fromId = dictionary["fromId"] as? String
+                message.toId = dictionary["toId"] as? String
+                message.text = dictionary["text"] as? String
+                message.timestamp = dictionary["time"] as? NSNumber
+                self.messages.append(message)
+                
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+            }
+        }, withCancel: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+        let message = messages[indexPath.row]
+        cell.textLabel?.text = message.toId
+        cell.detailTextLabel?.text = message.text
+        return cell
     }
     
     @objc func handleNewMessage(){
         let newMessageController = NewMessageController()
+        newMessageController.messasgeController = self
+        //NewMessageController에서 특정 Cell 클릭시 ChatLogController를 불러오기 위한 조치
+        
         let navController = UINavigationController(rootViewController: newMessageController)
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true, completion: nil)
@@ -45,10 +84,12 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
             //uid가 nil값을 가질 경우
             return
         }
+        //Firebase DB로부터 userData를 불러온다.
         Database.database().reference().child("users").child(uid).observe(.value, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String : AnyObject]{
                 //self.navigationItem.title = dictionary["name"] as? String
                 let user = User()
+                user.id = snapshot.key
                 user.name = dictionary["name"] as? String
                 user.email = dictionary["email"] as? String
                 user.profileImageUrl = dictionary["profileImageUrl"] as? String
@@ -63,7 +104,7 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         //self.navigationItem.title = user.name
         let titleView = UIButton()
         titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
-
+        
         
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -105,12 +146,13 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         }
         self.navigationItem.titleView = titleView
         
-       titleView.addTarget(self, action: #selector(showChatController), for: .touchUpInside)
+        // titleView.addTarget(self, action: #selector(showChatController), for: .touchUpInside)
         //ChatLogController를 불러온다.
     }
     
-    @objc func showChatController(){
+    func showChatControllerForUser(user : User){
         let chatLogController = ChatLogController(collectionViewLayout : UICollectionViewFlowLayout())
+        chatLogController.user = user
         navigationController?.pushViewController(chatLogController, animated: true)
     }
     

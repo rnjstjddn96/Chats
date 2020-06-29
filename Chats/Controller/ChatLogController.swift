@@ -12,6 +12,12 @@ import Firebase
 
 class ChatLogController : UICollectionViewController, UITextFieldDelegate{
     
+    var user : User?{
+        didSet{//property observer(값이 변경된 직후에 호출)
+            navigationItem.title = user?.name
+        }
+    }
+    
     //메시지 입력 공간
     lazy var inputTextField : UITextField = {
         let tf = UITextField()
@@ -25,7 +31,6 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "aaa"
         collectionView.backgroundColor = UIColor.white
         SetupInputContainer()
     }
@@ -92,8 +97,12 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         //referencd를 위한 unique키를 생성해 준다 -> 메시지 리스트를 생성할 수 있다
+        let toId = user!.id! //Message 수신 측 id
+        let fromId = Auth.auth().currentUser!.uid// Message 송신 측 id
+        let timeStamp : NSNumber = NSNumber(value: NSDate().timeIntervalSince1970) 
         
-        let values = ["text" : inputTextField.text!, "name" : "권성우"] as Dictionary? ?? [ : ]
+        let values = ["text" : inputTextField.text!, "toId" : toId, "fromId" : fromId, "time": timeStamp ] as Dictionary? ?? [ : ]
+        //user의 name을 받아 오지 않는 이유 : user가 name을 변경할 시 주고 받은 message들의 처리가 어렵다(비효율적)
         childRef.updateChildValues(values)
     }
     
