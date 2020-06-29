@@ -9,7 +9,8 @@
 import UIKit
 import Firebase
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, UITextFieldDelegate {
+    var messageController : MessageController?
     
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -59,6 +60,7 @@ class LoginController: UIViewController {
             }
             
             //successfully logged in our user
+            self.messageController?.fetchUserAndSetupNavBarTitle()
             self.dismiss(animated: true, completion: nil)
             
         })
@@ -97,12 +99,13 @@ class LoginController: UIViewController {
         return view
     }()
     
-    let passwordTextField: UITextField = {
+    lazy var passwordTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.autocapitalizationType = .none
         tf.isSecureTextEntry = true
+        tf.delegate = self
         return tf
     }()
     
@@ -246,6 +249,16 @@ class LoginController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
+            handleLogin()
+        } else {
+            handleRegister()
+        }
+        return true
     }
 }
 

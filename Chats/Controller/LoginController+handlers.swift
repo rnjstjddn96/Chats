@@ -11,6 +11,7 @@ import Firebase
 
 extension LoginController : UIImagePickerControllerDelegate , UINavigationControllerDelegate{
     
+
     @objc func handleSelectProfileImageView(){
         let picker = UIImagePickerController()
         picker.modalPresentationStyle = .fullScreen
@@ -43,9 +44,12 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
             
             //successfully authenticated user
             let imageName = NSUUID().uuidString
-            let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).png")
+            let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg. ")
             
-            if let uploadData = self.profileImageView.image?.pngData(){
+            
+            //업로드 된 이미지의 크기를 10퍼센트로 줄여 JPEG형태로 저장한다.
+            if let profileImage = self.profileImageView.image, let uploadData = profileImage.jpegData(compressionQuality: 0.1){
+//            if let uploadData = self.profileImageView.image?.pngData(){
                 
                 storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
                     
@@ -80,6 +84,11 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
                 print(err)
                 return
             }
+            let user = User()
+            user.name = values["name"] as? String
+            user.email = values["email"] as? String
+            user.profileImageUrl = values["profileImageUrl"] as? String
+            self.messageController?.setupNavBarWithUser(user: user)
             self.dismiss(animated: true, completion: nil)
         })
     }
