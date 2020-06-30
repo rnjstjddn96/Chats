@@ -11,6 +11,7 @@ import Firebase
 import SnapKit
 
 class MessageController: UITableViewController, UIGestureRecognizerDelegate {
+    let cellId = "cellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,8 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogout))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
+        tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
+        tableView.rowHeight = 72
         
         //not logged in
         checkIfUserIsLoggedIn()
@@ -27,6 +30,9 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
     }
     
     var messages = [Message]()
+    //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 딕셔너리 선언
+    var messageDictionary = [String : Message]()
+    
     
     //Firebase DB로 부터 메시지 데이터를 불러온다.
     func observeMessage(){
@@ -38,7 +44,16 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
                 message.toId = dictionary["toId"] as? String
                 message.text = dictionary["text"] as? String
                 message.timestamp = dictionary["time"] as? NSNumber
-                self.messages.append(message)
+//                self.messages.append(message)
+                
+                //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
+                if let toId = message.toId{
+                    self.messageDictionary[toId] = message
+                    self.messages = Array(self.messageDictionary.values)
+                    self.messages.sort { (message1, message2) -> Bool in
+                        return message1.timestamp!.intValue > message2.timestamp!.intValue
+                    }
+                }
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
@@ -51,12 +66,11 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         return messages.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? UserCell
         let message = messages[indexPath.row]
-        cell.textLabel?.text = message.toId
-        cell.detailTextLabel?.text = message.text
-        return cell
+        cell?.message = message
+        return cell!
     }
     
     @objc func handleNewMessage(){

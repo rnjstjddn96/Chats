@@ -10,6 +10,7 @@
 		D7826D50705A50D492906189 /* Pods_Chats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81A639D383B907546F9FCF94 /* Pods_Chats.framework */; };
 		EA8BF28124A8F588007ED8DB /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8BF28024A8F588007ED8DB /* ChatLogController.swift */; };
 		EA8BF28524A9D227007ED8DB /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8BF28424A9D227007ED8DB /* Message.swift */; };
+		EA8BF28824A9D9EB007ED8DB /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8BF28724A9D9EB007ED8DB /* UserCell.swift */; };
 		EA9022402495494B0084A9A0 /* userImage.png in Resources */ = {isa = PBXBuildFile; fileRef = EA90223F2495494B0084A9A0 /* userImage.png */; };
 		EA90224224954B480084A9A0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EA90224124954B480084A9A0 /* GoogleService-Info.plist */; };
 		EA902244249621530084A9A0 /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA902243249621530084A9A0 /* NewMessageController.swift */; };
@@ -29,6 +30,7 @@
 		81A639D383B907546F9FCF94 /* Pods_Chats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8BF28024A8F588007ED8DB /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		EA8BF28424A9D227007ED8DB /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		EA8BF28724A9D9EB007ED8DB /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		EA90223F2495494B0084A9A0 /* userImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userImage.png; sourceTree = "<group>"; };
 		EA90224124954B480084A9A0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EA902243249621530084A9A0 /* NewMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
@@ -62,6 +64,14 @@
 				81A639D383B907546F9FCF94 /* Pods_Chats.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA8BF28624A9D9D8007ED8DB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EA8BF28724A9D9EB007ED8DB /* UserCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		EA902247249628450084A9A0 /* Model */ = {
@@ -102,6 +112,7 @@
 		EA99B56D24949C4D0014E37F /* Chats */ = {
 			isa = PBXGroup;
 			children = (
+				EA8BF28624A9D9D8007ED8DB /* View */,
 				EA90224C2497DB4B0084A9A0 /* Helpers */,
 				EA902247249628450084A9A0 /* Model */,
 				EA99B58224949F770014E37F /* Controller */,
@@ -260,6 +271,7 @@
 				EA99B58424949F8A0014E37F /* LoginController.swift in Sources */,
 				EA902249249628610084A9A0 /* User.swift in Sources */,
 				EA99B56F24949C4D0014E37F /* AppDelegate.swift in Sources */,
+				EA8BF28824A9D9EB007ED8DB /* UserCell.swift in Sources */,
 				EA90224E2497DB650084A9A0 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
