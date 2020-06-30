@@ -26,13 +26,54 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         checkIfUserIsLoggedIn()
         
         
-        observeMessage()
+        //observeMessage()
+        
+        observeUserMessage()
     }
     
     var messages = [Message]()
     //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 딕셔너리 선언
     var messageDictionary = [String : Message]()
     
+    
+    //Firebase DB로 부터 메시지 데이터를 불러온다.
+    //메시지와 관계있는 사람의 계정에서만 보이도록 observeMessage()를 수정
+    func observeUserMessage(){
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            let messageId = snapshot.key
+            let messagesReference = Database.database().reference().child("messages").child(messageId)
+            
+            messagesReference.observeSingleEvent(of: .value)
+            { (snapshot) in
+                //print(snapshot)
+                if let dictionary = snapshot.value as? [String : AnyObject] {
+                                let message = Message()
+                                message.fromId = dictionary["fromId"] as? String
+                                message.toId = dictionary["toId"] as? String
+                                message.text = dictionary["text"] as? String
+                                message.timestamp = dictionary["time"] as? NSNumber
+                //                self.messages.append(message)
+                                
+                                //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
+                                if let toId = message.toId{
+                                    self.messageDictionary[toId] = message
+                                    self.messages = Array(self.messageDictionary.values)
+                                    self.messages.sort { (message1, message2) -> Bool in
+                                        return message1.timestamp!.intValue > message2.timestamp!.intValue
+                                    }
+                                }
+                                
+                                DispatchQueue.main.async(execute: {
+                                    self.tableView.reloadData()
+                                })
+                            }
+            }
+        }, withCancel: nil)
+    }
     
     //Firebase DB로 부터 메시지 데이터를 불러온다.
     func observeMessage(){

@@ -103,7 +103,19 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
         
         let values = ["text" : inputTextField.text!, "toId" : toId, "fromId" : fromId, "time": timeStamp ] as Dictionary? ?? [ : ]
         //user의 name을 받아 오지 않는 이유 : user가 name을 변경할 시 주고 받은 message들의 처리가 어렵다(비효율적)
-        childRef.updateChildValues(values)
+//        childRef.updateChildValues(values)
+        childRef.updateChildValues(values) { (error, nil) in
+            if error != nil{
+                print(error!)
+                return
+            }
+        }
+        
+        let userMessages = Database.database().reference().child("user-messages").child(fromId)
+        let messageId = childRef.key!
+        userMessages.updateChildValues([messageId : 1])
+        
+        
     }
     
     //return 키 처리를 위한 method
