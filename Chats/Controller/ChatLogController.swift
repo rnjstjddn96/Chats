@@ -111,11 +111,14 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
             }
         }
         
+        //메시지DB의 key값과 보낸 사람의 key를 연동하기위한 조치
         let userMessages = Database.database().reference().child("user-messages").child(fromId)
         let messageId = childRef.key!
         userMessages.updateChildValues([messageId : 1])
         
-        
+        //메시지DB의 key값과 받는 사람의 key를 연동하기위한 조치
+        let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId)
+        recipientUserMessagesRef.updateChildValues([messageId : 1])
     }
     
     //return 키 처리를 위한 method

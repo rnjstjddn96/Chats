@@ -24,11 +24,6 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         
         //not logged in
         checkIfUserIsLoggedIn()
-        
-        
-        //observeMessage()
-        
-        observeUserMessage()
     }
     
     var messages = [Message]()
@@ -62,6 +57,7 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
                                 if let toId = message.toId{
                                     self.messageDictionary[toId] = message
                                     self.messages = Array(self.messageDictionary.values)
+                                    //메시지 전송 시간순으로 정렬
                                     self.messages.sort { (message1, message2) -> Bool in
                                         return message1.timestamp!.intValue > message2.timestamp!.intValue
                                     }
@@ -76,32 +72,32 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
     }
     
     //Firebase DB로 부터 메시지 데이터를 불러온다.
-    func observeMessage(){
-        let ref = Database.database().reference().child("messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            if let dictionary = snapshot.value as? [String : AnyObject] {
-                let message = Message()
-                message.fromId = dictionary["fromId"] as? String
-                message.toId = dictionary["toId"] as? String
-                message.text = dictionary["text"] as? String
-                message.timestamp = dictionary["time"] as? NSNumber
-//                self.messages.append(message)
-                
-                //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
-                if let toId = message.toId{
-                    self.messageDictionary[toId] = message
-                    self.messages = Array(self.messageDictionary.values)
-                    self.messages.sort { (message1, message2) -> Bool in
-                        return message1.timestamp!.intValue > message2.timestamp!.intValue
-                    }
-                }
-                
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
-            }
-        }, withCancel: nil)
-    }
+//    func observeMessage(){
+//        let ref = Database.database().reference().child("messages")
+//        ref.observe(.childAdded, with: { (snapshot) in
+//            if let dictionary = snapshot.value as? [String : AnyObject] {
+//                let message = Message()
+//                message.fromId = dictionary["fromId"] as? String
+//                message.toId = dictionary["toId"] as? String
+//                message.text = dictionary["text"] as? String
+//                message.timestamp = dictionary["time"] as? NSNumber
+////                self.messages.append(message)
+//
+//                //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
+//                if let toId = message.toId{
+//                    self.messageDictionary[toId] = message
+//                    self.messages = Array(self.messageDictionary.values)
+//                    self.messages.sort { (message1, message2) -> Bool in
+//                        return message1.timestamp!.intValue > message2.timestamp!.intValue
+//                    }
+//                }
+//
+//                DispatchQueue.main.async(execute: {
+//                    self.tableView.reloadData()
+//                })
+//            }
+//        }, withCancel: nil)
+//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -156,7 +152,13 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
     //navBar에 Container추가, 정보출력(image, name)
     //nameLabel, profileImageView in containerView in titleView
     func setupNavBarWithUser(user : User){
-        //self.navigationItem.title = user.name
+        //로그아웃 이후 재로그인 할 떄 테이블뷰의 기존의 데이터를 지우고 다시 갱신한다.
+        messages.removeAll()
+        messageDictionary.removeAll()
+        tableView.reloadData()
+        observeUserMessage()
+        
+        
         let titleView = UIButton()
         titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
         
