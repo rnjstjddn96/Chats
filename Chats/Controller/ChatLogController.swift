@@ -33,6 +33,10 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //collectionView의 frame을 지정? top부분에 공백을 추가하기 위한 조치
+        collectionView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
+        //collectionView의 scrollbar의 이동 간에 top과 bottom에 padding을 넣어준다.
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView.backgroundColor = UIColor.white
         collectionView.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
         //CollectionViewCell 사용을 위한 등록
@@ -78,11 +82,26 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatMessageCell
         let message = messages[indexPath.item]
         cell.textView.text = message.text
+        
+        //입력받은 문자의 길이에 따라 bubbleView의 width를 조정하기 위해 ChatMessageCell의 bubbleView의 width값 reference에 estimateFrameForText를 적용
+        cell.bubbleViewWidthAnchor?.constant = estimateFrameForText(text: message.text!).width + 32
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: 80 )
+        var height : CGFloat = 80
+        if let text = messages[indexPath.item].text{
+            height = estimateFrameForText(text: text).height + 20
+        }
+        return CGSize(width: view.frame.width, height: height)
+    }
+    
+    //입력한 메시지의 길이에 따라 collectionView의 item의 크기가 동작으로 변경하기 위한 메소드
+    private func estimateFrameForText(text: String) -> CGRect{
+        let size = CGSize(width: 200, height: 1000)
+        let option = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        return NSString(string: text).boundingRect(with: size, options: option, attributes:[NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)], context: nil)
     }
     
     func SetupInputContainer(){
@@ -161,6 +180,8 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
                 return
             }
         }
+        
+        self.inputTextField.text = nil
         
         //메시지DB의 key값과 보낸 사람의 key를 연동하기위한 조치
         let userMessages = Database.database().reference().child("user-messages").child(fromId)

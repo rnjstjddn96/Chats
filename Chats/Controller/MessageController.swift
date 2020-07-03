@@ -54,8 +54,8 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
                 //                self.messages.append(message)
                                 
                                 //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
-                                if let toId = message.toId{
-                                    self.messageDictionary[toId] = message
+                                if let chatPartnerId = message.chatPartnerId(){
+                                    self.messageDictionary[chatPartnerId] = message
                                     self.messages = Array(self.messageDictionary.values)
                                     //메시지 전송 시간순으로 정렬
                                     self.messages.sort { (message1, message2) -> Bool in
