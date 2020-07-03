@@ -10,11 +10,13 @@ import UIKit
 import SnapKit
 import Firebase
 
-class ChatLogController : UICollectionViewController, UITextFieldDelegate{
-    
+class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout{
+    let cellId = "cellId"
+    var messages = [Message]()
     var user : User?{
         didSet{//property observer(값이 변경된 직후에 호출)
             navigationItem.title = user?.name
+            observeMessages()
         }
     }
     
@@ -32,13 +34,62 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = UIColor.white
+        collectionView.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
+        //CollectionViewCell 사용을 위한 등록
         SetupInputContainer()
+    }
+    
+    func observeMessages(){
+        guard let uid = Auth.auth().currentUser?.uid else{return}
+        
+        let userMessagesRef = Database.database().reference().child("user-messages").child(uid)
+        userMessagesRef.observe(.childAdded, with: { (snapshot) in
+            let messageId = snapshot.key
+            let messageRef = Database.database().reference().child("messages").child(messageId)
+            messageRef.observeSingleEvent(of: .value) { (snapshot) in
+                //                print(snapshot)
+                
+                guard let dictionary = snapshot.value as? [String:AnyObject]else {return}
+                let message = Message()
+                message.text = dictionary["text"] as? String
+                message.fromId = dictionary["fromId"] as? String
+                message.toId = dictionary["toId"] as? String
+                message.timestamp = dictionary["time"] as? NSNumber
+                
+                
+                //채팅방안의 맴버와 관련된 메시지만 messages 배열에 추가, collectionView의 재로딩
+                if message.chatPartnerId() == self.user!.id{
+                    self.messages.append(message)
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                }
+                
+            }
+        }, withCancel: nil)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    //UICollectionView의 셀은 default textLabel이 존재하지 않는다 -> ChatMessageCell 모델을 생성, 등록한다
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatMessageCell
+        let message = messages[indexPath.item]
+        cell.textView.text = message.text
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.view.frame.width, height: 80 )
     }
     
     func SetupInputContainer(){
         
         //하단 input container
         let containerView = UIView()
+        containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(containerView)
         
@@ -103,7 +154,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate{
         
         let values = ["text" : inputTextField.text!, "toId" : toId, "fromId" : fromId, "time": timeStamp ] as Dictionary? ?? [ : ]
         //user의 name을 받아 오지 않는 이유 : user가 name을 변경할 시 주고 받은 message들의 처리가 어렵다(비효율적)
-//        childRef.updateChildValues(values)
+        //        childRef.updateChildValues(values)
         childRef.updateChildValues(values) { (error, nil) in
             if error != nil{
                 print(error!)

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class Message: NSObject {
 
@@ -14,4 +15,10 @@ class Message: NSObject {
     var toId : String?
     var text : String?
     var timestamp : NSNumber?
+    
+    
+    //채팅하고 있는 상대의 ID key값 반환 메소드
+    func chatPartnerId() -> String? {
+        return fromId == Auth.auth().currentUser?.uid ? toId : fromId
+    }
 }

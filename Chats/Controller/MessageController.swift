@@ -110,6 +110,27 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
         return cell!
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let message = messages[indexPath.row ]
+//      print(message.text!, message.toId!, message.fromId!)
+        guard let chatPartnerId = message.chatPartnerId() else {return}
+        
+        let ref = Database.database().reference().child("users").child(chatPartnerId)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            guard let dictionary = snapshot.value as? [String : AnyObject]
+                else {
+                    return
+            }
+            let user = User()
+            user.id = chatPartnerId
+            user.email = dictionary["email"] as? String
+            user.name = dictionary["name"] as? String
+            user.profileImageUrl = dictionary["profileImageUrl"] as? String
+            self.showChatControllerForUser(user: user)
+        }
+
+    }
+    
     @objc func handleNewMessage(){
         let newMessageController = NewMessageController()
         newMessageController.messasgeController = self
