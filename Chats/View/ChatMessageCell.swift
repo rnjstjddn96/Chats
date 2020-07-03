@@ -12,6 +12,8 @@ import SnapKit
 class ChatMessageCell: UICollectionViewCell {
     
     var bubbleViewWidthAnchor : NSLayoutConstraint?
+    var bubbleViewRight : NSLayoutConstraint?
+    var bubbleViewLeft : NSLayoutConstraint?
     
     let textView : UITextView = {
         let tv  = UITextView()
@@ -23,22 +25,40 @@ class ChatMessageCell: UICollectionViewCell {
         return tv
     }()
     
+    static let blueColor = UIColor(r: 0, g: 137, b: 249)
+    
     let bubbleView : UIView = {
        let view = UIView()
-        view.backgroundColor = UIColor(r: 0, g: 137, b: 249)
+        view.backgroundColor = blueColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         return view
     }()
+    
+    let profileImageView : UIImageView = {
+       let iv = UIImageView()
+        iv.image = UIImage(named: "NMIcon")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.cornerRadius = 16
+        iv.layer.masksToBounds = true
+        iv.contentMode = .scaleAspectFill
+        return iv
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bubbleView)
         addSubview(textView)
+        addSubview(profileImageView)
         
         
         //x,y,height, width 지정
-        bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
+        bubbleViewRight = bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
+        bubbleViewRight?.isActive = true
+        
+        bubbleViewLeft = bubbleView.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant:  8)
+//        bubbleViewLeft?.isActive = false
+        
         bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         bubbleViewWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 200)
         bubbleViewWidthAnchor?.isActive = true
@@ -52,6 +72,16 @@ class ChatMessageCell: UICollectionViewCell {
             m.right.equalTo(bubbleView)
             m.height.equalTo(self)
         }
+        
+        //snapKit
+        //x,y,height, width 지정
+        profileImageView.snp.makeConstraints { (m) in
+            m.left.equalTo(self).offset(8)
+            m.bottom.equalTo(self)
+            m.width.equalTo(32)
+            m.height.equalTo(32)
+        }
+        
         
 //        textView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
 //        textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true

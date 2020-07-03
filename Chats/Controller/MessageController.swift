@@ -12,6 +12,7 @@ import SnapKit
 
 class MessageController: UITableViewController, UIGestureRecognizerDelegate {
     let cellId = "cellId"
+    var timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,42 +64,23 @@ class MessageController: UITableViewController, UIGestureRecognizerDelegate {
                                     }
                                 }
                                 
-                                DispatchQueue.main.async(execute: {
-                                    self.tableView.reloadData()
-                                })
+                    //obserUserMessage안에서 Table을 Reload 하는 경우 message를 발견할때마다 reload하여 오류가 발생한다.
+                    //tableReload를 줄이기 위해 timer를 invalidate()
+                    self.timer.invalidate()
+                    //메시지를 observe할때마다 handleReload 메소드를 호출
+                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false)
                             }
             }
         }, withCancel: nil)
     }
     
-    //Firebase DB로 부터 메시지 데이터를 불러온다.
-//    func observeMessage(){
-//        let ref = Database.database().reference().child("messages")
-//        ref.observe(.childAdded, with: { (snapshot) in
-//            if let dictionary = snapshot.value as? [String : AnyObject] {
-//                let message = Message()
-//                message.fromId = dictionary["fromId"] as? String
-//                message.toId = dictionary["toId"] as? String
-//                message.text = dictionary["text"] as? String
-//                message.timestamp = dictionary["time"] as? NSNumber
-////                self.messages.append(message)
-//
-//                //메시지를 보낸 사람이 동일한 경우 그룹화하기 위한 조치
-//                if let toId = message.toId{
-//                    self.messageDictionary[toId] = message
-//                    self.messages = Array(self.messageDictionary.values)
-//                    self.messages.sort { (message1, message2) -> Bool in
-//                        return message1.timestamp!.intValue > message2.timestamp!.intValue
-//                    }
-//                }
-//
-//                DispatchQueue.main.async(execute: {
-//                    self.tableView.reloadData()
-//                })
-//            }
-//        }, withCancel: nil)
-//    }
-    
+    @objc private func handleReload(){
+        DispatchQueue.main.async(execute: {
+            self.tableView.reloadData()
+            print("reloaded")
+        })
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }

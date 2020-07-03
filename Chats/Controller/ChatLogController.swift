@@ -83,10 +83,40 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         let message = messages[indexPath.item]
         cell.textView.text = message.text
         
+        setupCell(cell: cell, message: message)
+        
         //입력받은 문자의 길이에 따라 bubbleView의 width를 조정하기 위해 ChatMessageCell의 bubbleView의 width값 reference에 estimateFrameForText를 적용
         cell.bubbleViewWidthAnchor?.constant = estimateFrameForText(text: message.text!).width + 32
         
         return cell
+    }
+    
+    
+    
+    
+    //보내는 사람, 받는 사람을 구분하여 표시
+    private func setupCell(cell: ChatMessageCell, message: Message){
+        if let profileImageUrl = self.user?.profileImageUrl{
+            cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
+        }
+        if message.fromId == Auth.auth().currentUser?.uid {
+            //보내는 메시지(blue)
+            cell.bubbleView.backgroundColor = ChatMessageCell.blueColor //blueColor는 Class Property이므로 직접 접근 가능
+            cell.textView.textColor = UIColor.white
+            cell.profileImageView.isHidden = true
+            
+            cell.bubbleViewLeft?.isActive = false
+            cell.bubbleViewRight?.isActive = true
+            
+        }else{
+            //받는 메시지(Gray)
+            cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+            cell.textView.textColor = UIColor.black
+            cell.profileImageView.isHidden = false
+            
+            cell.bubbleViewLeft?.isActive = true
+            cell.bubbleViewRight?.isActive = false
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
