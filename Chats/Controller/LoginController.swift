@@ -8,8 +8,9 @@
 
 import UIKit
 import Firebase
+import NVActivityIndicatorView
 
-class LoginController: UIViewController, UITextFieldDelegate {
+class LoginController: UIViewController, UITextFieldDelegate, NVActivityIndicatorViewable {
     var messageController : MessageController?
     
     let inputsContainerView: UIView = {
@@ -44,7 +45,14 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }
     
     func handleLogin() {
+        startAnimating(CGSize(width: 30, height: 30), message: "Loading...", type: NVActivityIndicatorType.cubeTransition)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5){
+            NVActivityIndicatorPresenter.sharedInstance.setMessage("Authenticating")
+            //1.5초뒤 메시지는 Authenticating으로 변경
+        }
         guard let email = emailTextField.text, let password = passwordTextField.text else {
+            self.stopAnimating()
             print("Form is not valid")
             return
         }
@@ -52,6 +60,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             
             if error != nil {
+                self.stopAnimating()
                 let alertFail = UIAlertController(title: "Login", message: "Login Failed", preferredStyle: .actionSheet)
                 let actionfail = UIAlertAction(title: "OK", style: .default, handler: nil)
                 alertFail.addAction(actionfail)
@@ -60,8 +69,14 @@ class LoginController: UIViewController, UITextFieldDelegate {
             }
             
             //successfully logged in our user
-            self.messageController?.fetchUserAndSetupNavBarTitle()
-            self.dismiss(animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1){
+                self.stopAnimating()
+                self.messageController?.fetchUserAndSetupNavBarTitle()
+                self.dismiss(animated: true, completion: nil)
+                
+            }
+            
+            
             
         })
         

@@ -8,10 +8,11 @@
 
 import UIKit
 import Firebase
+import NVActivityIndicatorView
 
 extension LoginController : UIImagePickerControllerDelegate , UINavigationControllerDelegate{
     
-
+    
     @objc func handleSelectProfileImageView(){
         let picker = UIImagePickerController()
         picker.modalPresentationStyle = .fullScreen
@@ -23,7 +24,9 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
     }
     
     @objc func handleRegister(){
+        startAnimating(CGSize(width: 30, height: 30), message: "Authenticating", type: NVActivityIndicatorType.cubeTransition)
         guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
+            self.stopAnimating()
             print("Form is not valid")
             return
         }
@@ -31,6 +34,7 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
         Auth.auth().createUser(withEmail: email, password: password, completion: { (res, error) in
             
             if error != nil {
+                self.stopAnimating()
                 let alertFail = UIAlertController(title: "Register", message: "Register Failed", preferredStyle: .actionSheet)
                 let actionfail = UIAlertAction(title: "OK", style: .default, handler: nil)
                 alertFail.addAction(actionfail)
@@ -43,13 +47,14 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
             }
             
             //successfully authenticated user
+            
             let imageName = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg. ")
             
             
             //업로드 된 이미지의 크기를 10퍼센트로 줄여 JPEG형태로 저장한다.
             if let profileImage = self.profileImageView.image, let uploadData = profileImage.jpegData(compressionQuality: 0.1){
-//            if let uploadData = self.profileImageView.image?.pngData(){
+                //            if let uploadData = self.profileImageView.image?.pngData(){
                 
                 storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
                     
@@ -71,6 +76,10 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
                 
             }
             
+            
+            
+            
+            
         })
         
     }
@@ -89,6 +98,7 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
             user.email = values["email"] as? String
             user.profileImageUrl = values["profileImageUrl"] as? String
             self.messageController?.setupNavBarWithUser(user: user)
+            self.stopAnimating()
             self.dismiss(animated: true, completion: nil)
         })
     }
