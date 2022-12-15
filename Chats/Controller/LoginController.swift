@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import NVActivityIndicatorView
+import NVActivityIndicatorViewExtended
 
 class LoginController: UIViewController, UITextFieldDelegate, NVActivityIndicatorViewable {
     var messageController : MessageController?

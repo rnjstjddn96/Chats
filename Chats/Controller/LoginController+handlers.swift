@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 import NVActivityIndicatorView
 
 extension LoginController : UIImagePickerControllerDelegate , UINavigationControllerDelegate{
@@ -50,18 +51,18 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
             
             let imageName = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg. ")
-            
-            
+
+
             //업로드 된 이미지의 크기를 10퍼센트로 줄여 JPEG형태로 저장한다.
             if let profileImage = self.profileImageView.image, let uploadData = profileImage.jpegData(compressionQuality: 0.1){
                 //            if let uploadData = self.profileImageView.image?.pngData(){
-                
+
                 storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
-                    
+
                     if error != nil, metadata != nil{
                         return
                     }
-                    
+
                     storageRef.downloadURL { (url, error) in
                         if error != nil{
                             return
@@ -71,9 +72,9 @@ extension LoginController : UIImagePickerControllerDelegate , UINavigationContro
                             self.registerUserIntoDatabaseWithUID(uid: uid, values: values as [String : AnyObject])
                         }
                     }
-                    
+
                 }
-                
+
             }
             
             

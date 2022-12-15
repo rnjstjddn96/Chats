@@ -3,11 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D7826D50705A50D492906189 /* Pods_Chats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81A639D383B907546F9FCF94 /* Pods_Chats.framework */; };
+		096C2145294B452200598BC0 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 096C2144294B452200598BC0 /* FirebaseDatabase */; };
+		096C2147294B452200598BC0 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 096C2146294B452200598BC0 /* FirebaseDatabaseSwift */; };
+		096C2149294B45EF00598BC0 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 096C2148294B45EF00598BC0 /* FirebaseStorageCombine-Community */; };
+		09E58A48294B42B2005586EE /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 09E58A47294B42B2005586EE /* FirebaseAuth */; };
+		09E58A4A294B42B2005586EE /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 09E58A49294B42B2005586EE /* FirebaseStorage */; };
+		09E58A4D294B42F3005586EE /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 09E58A4C294B42F3005586EE /* NVActivityIndicatorView */; };
+		09E58A4F294B42F3005586EE /* NVActivityIndicatorViewExtended in Frameworks */ = {isa = PBXBuildFile; productRef = 09E58A4E294B42F3005586EE /* NVActivityIndicatorViewExtended */; };
+		09E58A52294B433E005586EE /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 09E58A51294B433E005586EE /* SnapKit */; };
 		EA7CF26F24AEF3950057E5AD /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7CF26E24AEF3950057E5AD /* ChatMessageCell.swift */; };
 		EA8BF28124A8F588007ED8DB /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8BF28024A8F588007ED8DB /* ChatLogController.swift */; };
 		EA8BF28524A9D227007ED8DB /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8BF28424A9D227007ED8DB /* Message.swift */; };
@@ -26,9 +33,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6819D298404622E204E3D946 /* Pods-Chats.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chats.debug.xcconfig"; path = "Target Support Files/Pods-Chats/Pods-Chats.debug.xcconfig"; sourceTree = "<group>"; };
-		6BACE5F1CD5300BADDD76E58 /* Pods-Chats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chats.release.xcconfig"; path = "Target Support Files/Pods-Chats/Pods-Chats.release.xcconfig"; sourceTree = "<group>"; };
-		81A639D383B907546F9FCF94 /* Pods_Chats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA7CF26E24AEF3950057E5AD /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
 		EA8BF28024A8F588007ED8DB /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		EA8BF28424A9D227007ED8DB /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -53,17 +57,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7826D50705A50D492906189 /* Pods_Chats.framework in Frameworks */,
+				096C2147294B452200598BC0 /* FirebaseDatabaseSwift in Frameworks */,
+				096C2145294B452200598BC0 /* FirebaseDatabase in Frameworks */,
+				096C2149294B45EF00598BC0 /* FirebaseStorageCombine-Community in Frameworks */,
+				09E58A4D294B42F3005586EE /* NVActivityIndicatorView in Frameworks */,
+				09E58A48294B42B2005586EE /* FirebaseAuth in Frameworks */,
+				09E58A52294B433E005586EE /* SnapKit in Frameworks */,
+				09E58A4A294B42B2005586EE /* FirebaseStorage in Frameworks */,
+				09E58A4F294B42F3005586EE /* NVActivityIndicatorViewExtended in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1F76DBDA4AEFDD076074F805 /* Frameworks */ = {
+		096C2143294B452200598BC0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				81A639D383B907546F9FCF94 /* Pods_Chats.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -99,8 +109,7 @@
 			children = (
 				EA99B56D24949C4D0014E37F /* Chats */,
 				EA99B56C24949C4D0014E37F /* Products */,
-				F23D03A3BA1B37CC057A242F /* Pods */,
-				1F76DBDA4AEFDD076074F805 /* Frameworks */,
+				096C2143294B452200598BC0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,15 +150,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		F23D03A3BA1B37CC057A242F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6819D298404622E204E3D946 /* Pods-Chats.debug.xcconfig */,
-				6BACE5F1CD5300BADDD76E58 /* Pods-Chats.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,17 +157,25 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EA99B57F24949C4F0014E37F /* Build configuration list for PBXNativeTarget "Chats" */;
 			buildPhases = (
-				13191CC6DE12B6D1FAF1AF48 /* [CP] Check Pods Manifest.lock */,
 				EA99B56724949C4D0014E37F /* Sources */,
 				EA99B56824949C4D0014E37F /* Frameworks */,
 				EA99B56924949C4D0014E37F /* Resources */,
-				EA1897D3708B4B3B3851593C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Chats;
+			packageProductDependencies = (
+				09E58A47294B42B2005586EE /* FirebaseAuth */,
+				09E58A49294B42B2005586EE /* FirebaseStorage */,
+				09E58A4C294B42F3005586EE /* NVActivityIndicatorView */,
+				09E58A4E294B42F3005586EE /* NVActivityIndicatorViewExtended */,
+				09E58A51294B433E005586EE /* SnapKit */,
+				096C2144294B452200598BC0 /* FirebaseDatabase */,
+				096C2146294B452200598BC0 /* FirebaseDatabaseSwift */,
+				096C2148294B45EF00598BC0 /* FirebaseStorageCombine-Community */,
+			);
 			productName = Chats;
 			productReference = EA99B56B24949C4D0014E37F /* Chats.app */;
 			productType = "com.apple.product-type.application";
@@ -196,6 +204,11 @@
 				Base,
 			);
 			mainGroup = EA99B56224949C4D0014E37F;
+			packageReferences = (
+				09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				09E58A4B294B42F2005586EE /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
+				09E58A50294B433E005586EE /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = EA99B56C24949C4D0014E37F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -218,48 +231,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		13191CC6DE12B6D1FAF1AF48 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Chats-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EA1897D3708B4B3B3851593C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Chats/Pods-Chats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Chats/Pods-Chats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chats/Pods-Chats-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EA99B56724949C4D0014E37F /* Sources */ = {
@@ -410,7 +381,6 @@
 		};
 		EA99B58024949C4F0014E37F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6819D298404622E204E3D946 /* Pods-Chats.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -429,7 +399,6 @@
 		};
 		EA99B58124949C4F0014E37F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6BACE5F1CD5300BADDD76E58 /* Pods-Chats.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -468,6 +437,76 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		09E58A4B294B42F2005586EE /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ninjaprox/NVActivityIndicatorView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		09E58A50294B433E005586EE /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		096C2144294B452200598BC0 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		096C2146294B452200598BC0 /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+		096C2148294B45EF00598BC0 /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+		09E58A47294B42B2005586EE /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		09E58A49294B42B2005586EE /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A46294B42B2005586EE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		09E58A4C294B42F3005586EE /* NVActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A4B294B42F2005586EE /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
+			productName = NVActivityIndicatorView;
+		};
+		09E58A4E294B42F3005586EE /* NVActivityIndicatorViewExtended */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A4B294B42F2005586EE /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
+			productName = NVActivityIndicatorViewExtended;
+		};
+		09E58A51294B433E005586EE /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09E58A50294B433E005586EE /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EA99B56324949C4D0014E37F /* Project object */;
 }
